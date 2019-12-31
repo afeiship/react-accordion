@@ -39,7 +39,7 @@ export default class extends Component {
         )}
         {...props}>
         <section
-          className={`webkit-sassui-border-collapse__row${CLASS_NAME}__row`}>
+          className={`webkit-sassui-border-collapse__row ${CLASS_NAME}__row`}>
           {this.childView}
         </section>
       </div>
