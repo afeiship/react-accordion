@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import noop from '@feizheng/noop';
-import objectAssign from 'object-assign';
 
 const CLASS_NAME = 'react-border-collapse';
 
-export default class extends Component {
+export default class ReactBorderCollapse extends Component {
   static displayName = CLASS_NAME;
   static propTypes = {
+    /**
+     * The extended className for component.
+     */
     className: PropTypes.string
   };
 
@@ -20,7 +20,7 @@ export default class extends Component {
     return React.Children.map(children, (child) => {
       return React.cloneElement(child, {
         className: classNames(
-          'webkit-sassui-border-collapse__cell',
+          'wsui-border-collapse__cell',
           child.props.className
         )
       });
@@ -33,13 +33,12 @@ export default class extends Component {
       <div
         data-component={CLASS_NAME}
         className={classNames(
-          'webkit-sassui-border-collapse__table',
+          'wsui-border-collapse__table',
           CLASS_NAME,
           className
         )}
         {...props}>
-        <section
-          className={`webkit-sassui-border-collapse__row ${CLASS_NAME}__row`}>
+        <section className={`wsui-border-collapse__row ${CLASS_NAME}__row`}>
           {this.childView}
         </section>
       </div>
