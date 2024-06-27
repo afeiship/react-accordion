@@ -46,7 +46,15 @@ function App() {
         <ReactAccordion className="y-1 bg-green-200 p-2 rounded-lg" defaultValue="k3">
           <ReactAccordion.Item
             className="border border-blue-500"
-            title={<header className="bg-gray-200 px-4">aaa</header>}
+            title={(args, opts) => {
+              console.log(args, opts);
+              return (
+                <header className="bg-gray-200 px-4">
+                  {opts.active ? '-' : '+'}
+                  aaa
+                </header>
+              );
+            }}
             value="k1">
             <p>Content 1</p>
           </ReactAccordion.Item>

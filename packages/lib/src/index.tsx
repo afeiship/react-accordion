@@ -37,7 +37,7 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
 
   constructor(props: ReactAccordionProps) {
     super(props);
-    this.state = { value: props.value || props.defaultValue };
+    this.state = { value: props.value || props.defaultValue, collapsed: false };
   }
 
   shouldComponentUpdate(nextProps: Readonly<ReactAccordionProps>): boolean {
@@ -50,17 +50,21 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
     return true;
   }
 
-  handleTemplate = ({ item }, opts) => {
+  handleTemplate = (args, opts) => {
+    const { item } = args;
+    const stateValue = this.state.value;
+    const isFn = typeof item.title === 'function';
+    const summery = isFn ? item.title(args, opts) : item.title;
     return (
       <ReactCollapse
         key={item.value}
-        collapsed={this.state.value !== item.value}
-        onChange={(collapsed: boolean) => {
-          if (collapsed) return;
-          this.setState({ value: item.value });
+        collapsed={stateValue !== item.value}
+        onChange={(collapsed) => {
+          const value = collapsed ? null : item.value;
+          this.setState({ value, collapsed });
           opts.cb();
         }}
-        summary={item.title}
+        summary={summery}
         className={cx('react-accordion-item', item.className)}>
         {item.children}
       </ReactCollapse>
