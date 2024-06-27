@@ -1,6 +1,6 @@
 // import noop from '@jswork/noop';
 import cx from 'classnames';
-import React, { ReactNode, Component } from 'react';
+import React, { Component } from 'react';
 import ReactSelection, { ReactSelectionProps } from '@jswork/react-selection';
 import ReactCollapse from '@jswork/react-collapse';
 import ReactAccordionItem from './item';
@@ -8,21 +8,20 @@ import ReactAccordionItem from './item';
 const CLASS_NAME = 'react-accordion';
 export type ReactAccordionProps = {
   /**
-   * The extended className for component.
-   * @default ''
-   */
-  className?: string;
-  /**
-   * The children element.
-   */
-  children?: ReactNode;
-  /**
    * The default value of selected item.
    */
-  defaultValue?: any;
-} & Omit<ReactSelectionProps<any>, 'items'>;
+  defaultValue?: string;
+  /**
+   * The value of selected item.
+   */
+  value?: string;
+} & Omit<ReactSelectionProps<any>, 'items' | 'template'>;
 
-export default class ReactAccordion extends Component<ReactAccordionProps, any> {
+interface ReactAccordionState {
+  value: string;
+}
+
+export default class ReactAccordion extends Component<ReactAccordionProps, ReactAccordionState> {
   static displayName = CLASS_NAME;
   static version = '__VERSION__';
   static defaultProps = {};
@@ -32,12 +31,13 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
     const { children } = this.props;
     return React.Children.map(children, (child: React.ReactNode) => {
       if (React.isValidElement(child)) return child.props;
-    }) as any;
+    }) as any[];
   }
 
   constructor(props: ReactAccordionProps) {
     super(props);
-    this.state = { value: props.value || props.defaultValue, collapsed: false };
+    const value = props.value || props.defaultValue;
+    this.state = { value };
   }
 
   shouldComponentUpdate(nextProps: Readonly<ReactAccordionProps>): boolean {
@@ -54,17 +54,16 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
     const { item } = args;
     const stateValue = this.state.value;
     const isFn = typeof item.title === 'function';
-    const summery = isFn ? item.title(args, opts) : item.title;
+    const summary = isFn ? item.title(args, opts) : item.title;
     return (
       <ReactCollapse
         key={item.value}
         collapsed={stateValue !== item.value}
         onChange={(collapsed) => {
           const value = collapsed ? null : item.value;
-          this.setState({ value, collapsed });
-          opts.cb();
+          this.setState({ value });
         }}
-        summary={summery}
+        summary={summary}
         className={cx('react-accordion-item', item.className)}>
         {item.children}
       </ReactCollapse>
@@ -76,10 +75,10 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
 
     return (
       <ReactSelection
+        data-component={CLASS_NAME}
         value={this.state.value}
         items={this.items}
         template={this.handleTemplate}
-        data-component={CLASS_NAME}
         className={cx(CLASS_NAME, className)}
         {...rest}
       />
