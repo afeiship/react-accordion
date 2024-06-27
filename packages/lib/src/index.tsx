@@ -39,14 +39,15 @@ export default class ReactAccordion extends Component<ReactAccordionProps, React
     this.state = { value: props.value || props.defaultValue };
   }
 
-  shouldComponentUpdate(nextProps: Readonly<ReactAccordionProps>): boolean {
-    const { value } = nextProps;
+  componentDidUpdate() {
+    const { value } = this.props;
     const stateValue = this.state.value;
-    const useValue = typeof value !== 'undefined';
-    if (useValue && stateValue !== value) {
+
+    // 检查value prop是否改变，并且它不是一个undefined
+    if (value !== undefined && value !== stateValue) {
       this.setState({ value });
+      this.handleChange(value); // 如果需要，在这里也调用handleChange
     }
-    return true;
   }
 
   handleChange = (value: any) => {
