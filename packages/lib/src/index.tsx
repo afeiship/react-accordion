@@ -41,7 +41,7 @@ export default class ReactAccordion extends Component<ReactAccordionProps, React
 
   componentDidUpdate() {
     const { value } = this.props;
-    const stateValue = this.state.value;
+    const { value: stateValue } = this.state;
 
     // 检查value prop是否改变，并且它不是一个undefined
     if (value !== undefined && value !== stateValue) {
