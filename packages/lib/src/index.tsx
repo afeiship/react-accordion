@@ -30,8 +30,8 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
 
   get items() {
     const { children } = this.props;
-    return React.Children.map(children, (child: React.ReactElement) => {
-      return child.props;
+    return React.Children.map(children, (child: React.ReactNode) => {
+      if (React.isValidElement(child)) return child.props;
     }) as any;
   }
 
@@ -42,8 +42,9 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
 
   shouldComponentUpdate(nextProps: Readonly<ReactAccordionProps>): boolean {
     const { value } = nextProps;
+    const stateValue = this.state.value;
     const useValue = typeof value !== 'undefined';
-    if (useValue && value !== this.state.value) {
+    if (useValue && stateValue !== value) {
       this.setState({ value });
     }
     return true;
@@ -55,10 +56,9 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
         key={item.value}
         collapsed={this.state.value !== item.value}
         onChange={(collapsed: boolean) => {
-          if (!collapsed) {
-            this.setState({ value: item.value });
-            opts.cb();
-          }
+          if (collapsed) return;
+          this.setState({ value: item.value });
+          opts.cb();
         }}
         summary={item.title}
         className={cx('react-accordion-item', item.className)}>
