@@ -12,8 +12,6 @@ function App() {
     }, 1000);
   });
 
-  console.log('render');
-
   return (
     <div className="m-10 p-4 shadow bg-gray-100 text-gray-800 hover:shadow-md transition-all">
       <div className="badge badge-warning absolute right-0 top-0 m-4">Build Time: {BUILD_TIME}</div>
@@ -49,7 +47,7 @@ function App() {
           <ReactAccordion.Item
             className="border border-blue-500"
             title={(args, opts) => {
-              console.log(args, opts);
+              // console.log(args, opts);
               return (
                 <header className="bg-gray-200 px-4">
                   {opts.active ? '-' : '+'}
@@ -63,7 +61,7 @@ function App() {
           <ReactAccordion.Item
             className="border border-blue-500"
             title={(args, opts) => {
-              console.log(args, opts);
+              // console.log(args, opts);
               return (
                 <header className="bg-gray-200 px-4">
                   {opts.active ? '-' : '+'}
