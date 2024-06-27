@@ -10,7 +10,7 @@ function App() {
       // console.log('update v');
       setV('k2');
     }, 1000);
-  });
+  }, []);
 
   return (
     <div className="m-10 p-4 shadow bg-gray-100 text-gray-800 hover:shadow-md transition-all">
@@ -20,8 +20,7 @@ function App() {
         <h3>Use value + onChange</h3>
         <ReactAccordion
           className="y-3 bg-purple-200 p-2 rounded-lg"
-          value={v}
-          onChange={(e) => setV(e)}>
+          value={v} onChange={(e) => setV(e)}>
           <ReactAccordion.Item
             className="border border-slate-500"
             title={<header className="bg-gray-200 px-4">aaa</header>}

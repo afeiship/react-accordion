@@ -36,8 +36,7 @@ export default class ReactAccordion extends Component<ReactAccordionProps, React
 
   constructor(props: ReactAccordionProps) {
     super(props);
-    const value = props.value || props.defaultValue;
-    this.state = { value };
+    this.state = { value: props.value || props.defaultValue };
   }
 
   shouldComponentUpdate(nextProps: Readonly<ReactAccordionProps>): boolean {
@@ -50,9 +49,14 @@ export default class ReactAccordion extends Component<ReactAccordionProps, React
     return true;
   }
 
+  handleChange = (value: any) => {
+    const { onChange } = this.props;
+    onChange?.(value);
+  };
+
   handleTemplate = (args, opts) => {
     const { item } = args;
-    const stateValue = this.state.value;
+    const { value: stateValue } = this.state;
     const isFn = typeof item.title === 'function';
     const summary = isFn ? item.title(args, opts) : item.title;
     return (
@@ -62,6 +66,8 @@ export default class ReactAccordion extends Component<ReactAccordionProps, React
         onChange={(collapsed) => {
           const value = collapsed ? null : item.value;
           this.setState({ value });
+          this.handleChange(value);
+          opts.cb();
         }}
         summary={summary}
         className={cx('react-accordion-item', item.className)}>
@@ -72,14 +78,17 @@ export default class ReactAccordion extends Component<ReactAccordionProps, React
 
   render() {
     const { className, children, value, onChange, ...rest } = this.props;
+    const { value: stateValue } = this.state;
 
     return (
       <ReactSelection
         data-component={CLASS_NAME}
-        value={this.state.value}
+        value={stateValue}
+        reversible
         items={this.items}
         template={this.handleTemplate}
         className={cx(CLASS_NAME, className)}
+        onChange={this.handleChange}
         {...rest}
       />
     );
