@@ -16,6 +16,10 @@ export type ReactAccordionProps = {
    * The children element.
    */
   children?: ReactNode;
+  /**
+   * The default value of selected item.
+   */
+  defaultValue?: any;
 } & Omit<ReactSelectionProps<any>, 'items'>;
 
 export default class ReactAccordion extends Component<ReactAccordionProps, any> {
@@ -26,16 +30,23 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
 
   get items() {
     const { children } = this.props;
-    return React.Children.map(children, (child: React.ReactElement, index) => {
-      const { title, children } = child.props;
-      const value = child.key || index;
-      return { value, key: value, title, children };
+    return React.Children.map(children, (child: React.ReactElement) => {
+      return child.props;
     }) as any;
   }
 
   constructor(props: ReactAccordionProps) {
     super(props);
-    this.state = { value: props.value };
+    this.state = { value: props.value || props.defaultValue };
+  }
+
+  shouldComponentUpdate(nextProps: Readonly<ReactAccordionProps>): boolean {
+    const { value } = nextProps;
+    const useValue = typeof value !== 'undefined';
+    if (useValue && value !== this.state.value) {
+      this.setState({ value });
+    }
+    return true;
   }
 
   handleTemplate = ({ item }, opts) => {
@@ -43,25 +54,25 @@ export default class ReactAccordion extends Component<ReactAccordionProps, any> 
       <ReactCollapse
         key={item.value}
         collapsed={this.state.value !== item.value}
-        onChange={(v) => {
-          console.log('item: ', item, v);
-          // if (!v) this.setState({ value: item.value });
-          opts.cb();
+        onChange={(collapsed: boolean) => {
+          if (!collapsed) {
+            this.setState({ value: item.value });
+            opts.cb();
+          }
         }}
         summary={item.title}
-        className="react-accordion-item">
+        className={cx('react-accordion-item', item.className)}>
         {item.children}
       </ReactCollapse>
     );
   };
 
   render() {
-    const { className, children, ...rest } = this.props;
+    const { className, children, value, onChange, ...rest } = this.props;
 
     return (
       <ReactSelection
         value={this.state.value}
-        onChange={(e) => this.setState({ value: e })}
         items={this.items}
         template={this.handleTemplate}
         data-component={CLASS_NAME}

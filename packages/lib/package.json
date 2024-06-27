@@ -33,7 +33,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
-    "@jswork/react-collapse": "^1.1.9",
+    "@jswork/react-collapse": "^1.1.14",
     "@jswork/react-selection": "^1.0.8"
   }
 }

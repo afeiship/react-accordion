@@ -5,6 +5,11 @@ const CLASS_NAME = 'react-accordion-item';
 // const uuid = () => Math.random().toString(36).substring(2, 9);
 export type ReactAccordionItemProps = {
   /**
+   * The extended className for component.
+   * @default ''
+   */
+  className?: string;
+  /**
    * The accordion item title.
    */
   title: ReactNode;
@@ -12,6 +17,10 @@ export type ReactAccordionItemProps = {
    * The children element.
    */
   children?: ReactNode;
+  /**
+   * The unique value of accordion item.
+   */
+  value?: string;
 } & React.PropsWithChildren;
 
 export default class ReactAccordionItem extends Component<ReactAccordionItemProps> {
