@@ -30,10 +30,10 @@ npm install -S @jswork/react-accordion
 
     useEffect(() => {
       setTimeout(() => {
-        console.log('update v');
+        // console.log('update v');
         setV('k2');
       }, 1000);
-    });
+    }, []);
 
     return (
       <div className="m-10 p-4 shadow bg-gray-100 text-gray-800 hover:shadow-md transition-all">
@@ -43,8 +43,7 @@ npm install -S @jswork/react-accordion
           <h3>Use value + onChange</h3>
           <ReactAccordion
             className="y-3 bg-purple-200 p-2 rounded-lg"
-            value={v}
-            onChange={(e) => setV(e)}>
+            value={v} onChange={(e) => setV(e)}>
             <ReactAccordion.Item
               className="border border-slate-500"
               title={<header className="bg-gray-200 px-4">aaa</header>}
@@ -70,7 +69,7 @@ npm install -S @jswork/react-accordion
             <ReactAccordion.Item
               className="border border-blue-500"
               title={(args, opts) => {
-                console.log(args, opts);
+                // console.log(args, opts);
                 return (
                   <header className="bg-gray-200 px-4">
                     {opts.active ? '-' : '+'}
@@ -83,7 +82,15 @@ npm install -S @jswork/react-accordion
             </ReactAccordion.Item>
             <ReactAccordion.Item
               className="border border-blue-500"
-              title={<header className="bg-gray-200 px-4">bbb</header>}
+              title={(args, opts) => {
+                // console.log(args, opts);
+                return (
+                  <header className="bg-gray-200 px-4">
+                    {opts.active ? '-' : '+'}
+                    bbb
+                  </header>
+                );
+              }}
               value="k2">
               <p>Content 2</p>
             </ReactAccordion.Item>
